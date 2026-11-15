@@ -19,9 +19,9 @@ enum LaunchAtLogin {
         switch SMAppService.mainApp.status {
         case .enabled: return .enabled
         case .requiresApproval: return .requiresApproval
-        case .notRegistered: return .disabled
-        case .notFound: return .unavailable
-        @unknown default: return .unavailable
+        // An app bundle that was never registered reports notFound rather than notRegistered.
+        case .notRegistered, .notFound: return .disabled
+        @unknown default: return .disabled
         }
     }
 
