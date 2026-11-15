@@ -1,4 +1,4 @@
-.PHONY: build test app run icon clean
+.PHONY: build test app dmg run icon clean
 
 build:
 	swift build
@@ -8,6 +8,9 @@ test:
 
 app:
 	scripts/build-app.sh
+
+dmg:
+	scripts/build-dmg.sh
 
 run: app
 	open build/Headroom.app
