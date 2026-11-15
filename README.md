@@ -35,6 +35,16 @@ Tools whose CLI is not installed are hidden. By default, usage refreshes every 5
 
 Requires macOS 13 Ventura or later and at least one of the supported CLIs installed and signed in.
 
+Download `Headroom-<version>.dmg` from [Releases](https://github.com/aisk/headroom-macos/releases/latest) and drag Headroom into Applications. The app is a universal binary for Apple silicon and Intel Macs.
+
+The release is ad-hoc signed and not notarized, so macOS blocks the first launch. Open it once anyway from **System Settings › Privacy & Security › Open Anyway**, or clear the quarantine flag:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Headroom.app
+```
+
+To build it yourself instead:
+
 ```sh
 make app          # builds build/Headroom.app
 cp -R build/Headroom.app /Applications/
@@ -54,6 +64,7 @@ swift build
 swift test
 scripts/build-app.sh                  # build/Headroom.app, ad-hoc signed
 UNIVERSAL=1 scripts/build-app.sh      # Apple silicon + Intel
+scripts/build-dmg.sh                  # build/Headroom-<version>.dmg, universal
 swift tools/generate-icon.swift       # regenerate the app icon
 ```
 
