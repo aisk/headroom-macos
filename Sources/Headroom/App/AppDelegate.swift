@@ -89,6 +89,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             monitor.setInterval(settings.refreshInterval)
         }
         model.refreshOnOpen = settings.refreshOnOpen
+        model.accountDisplay = settings.accountDisplay
     }
 
     private func showSettings() {

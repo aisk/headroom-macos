@@ -29,12 +29,12 @@ struct ProviderRow: Identifiable, Equatable {
     /// Remaining percent of the most constrained window, for the menu bar icon.
     var remaining: Double? { snapshot?.mostConstrained?.remainingPercent }
 
-    func subtitle(now: Date) -> String {
+    func subtitle(now: Date, accountDisplay: AccountDisplay) -> String {
         var parts = [String]()
         if let plan = snapshot?.plan, !plan.isEmpty {
             parts.append(plan)
         }
-        if let account = snapshot?.account, !account.isEmpty {
+        if let account = accountDisplay.format(snapshot?.account) {
             parts.append(account)
         }
         if isRefreshing {
@@ -57,6 +57,9 @@ final class MainViewModel: ObservableObject {
 
     /// Opening the panel refreshes data older than two minutes.
     var refreshOnOpen = true
+
+    /// How the signed-in account is shown; set from Settings.
+    @Published var accountDisplay = AccountDisplay.full
 
     /// Called after any provider changes.
     var onChange: (() -> Void)?

@@ -51,7 +51,7 @@ cp -R build/Headroom.app /Applications/
 open /Applications/Headroom.app
 ```
 
-Click the menu bar icon to see your usage. Right-click (or Control-click) it for **Show Usage**, **Refresh Now**, **Settings…**, and **Quit Headroom**; the same commands are in the panel's **⋯** menu. In Settings you can make Headroom launch at login, turn off tools you don't want to see (they are then never run), and choose how often usage refreshes, including manual only.
+Click the menu bar icon to see your usage. Right-click (or Control-click) it for **Show Usage**, **Refresh Now**, **Settings…**, and **Quit Headroom**; the same commands are in the panel's **⋯** menu. In Settings you can make Headroom launch at login, turn off tools you don't want to see (they are then never run), choose how often usage refreshes (including manual only), and show your account email in full, partially hidden, or not at all.
 
 The menu bar icon draws one bar per tool, filled with the quota left in its most constrained window; a bar turns red below 10%. Hover over it for a summary.
 

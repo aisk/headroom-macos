@@ -16,14 +16,23 @@ public struct AppSettings: Codable, Equatable, Sendable {
     /// Refresh data older than two minutes when the panel is opened.
     public var refreshOnOpen: Bool = true
 
-    public init(disabledProviders: [String] = [], refreshIntervalMinutes: Int = defaultRefreshIntervalMinutes, refreshOnOpen: Bool = true) {
+    /// How the signed-in account (e.g. an email address) is shown in the panel.
+    public var accountDisplay: AccountDisplay = .full
+
+    public init(
+        disabledProviders: [String] = [],
+        refreshIntervalMinutes: Int = defaultRefreshIntervalMinutes,
+        refreshOnOpen: Bool = true,
+        accountDisplay: AccountDisplay = .full
+    ) {
         self.disabledProviders = disabledProviders
         self.refreshIntervalMinutes = refreshIntervalMinutes
         self.refreshOnOpen = refreshOnOpen
+        self.accountDisplay = accountDisplay
     }
 
     private enum CodingKeys: String, CodingKey {
-        case disabledProviders, refreshIntervalMinutes, refreshOnOpen
+        case disabledProviders, refreshIntervalMinutes, refreshOnOpen, accountDisplay
     }
 
     /// Missing, null or invalid values fall back to the defaults.
@@ -36,6 +45,7 @@ public struct AppSettings: Codable, Equatable, Sendable {
             refreshIntervalMinutes = Self.defaultRefreshIntervalMinutes
         }
         refreshOnOpen = (try? container.decodeIfPresent(Bool.self, forKey: .refreshOnOpen)) ?? true
+        accountDisplay = (try? container.decodeIfPresent(AccountDisplay.self, forKey: .accountDisplay)) ?? .full
     }
 
     /// Seconds between automatic refreshes, or nil when only manual refreshes run.

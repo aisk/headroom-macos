@@ -119,3 +119,34 @@ final class UsageMonitorEnabledTests: XCTestCase {
         XCTAssertEqual(changes, 1)
     }
 }
+
+final class AccountDisplayTests: XCTestCase {
+    func testMasksEmailAddresses() {
+        XCTAssertEqual(AccountMasker.mask("jane.doe@example.com"), "j•••e@e•••.com")
+        XCTAssertEqual(AccountMasker.mask("name@example.co.uk"), "n•••e@e•••.uk")
+        XCTAssertEqual(AccountMasker.mask("me@example.com"), "m•••@e•••.com")
+        XCTAssertEqual(AccountMasker.mask("a@b"), "a•••@b•••")
+        XCTAssertEqual(AccountMasker.mask("@example.com"), "•••@e•••.com")
+    }
+
+    func testMasksOtherAccountNames() {
+        XCTAssertEqual(AccountMasker.mask("Acme Corp"), "A•••p")
+        XCTAssertEqual(AccountMasker.mask("abc"), "a•••")
+    }
+
+    func testDisplayModes() {
+        XCTAssertEqual(AccountDisplay.full.format("me@example.com"), "me@example.com")
+        XCTAssertEqual(AccountDisplay.masked.format("me@example.com"), "m•••@e•••.com")
+        XCTAssertNil(AccountDisplay.hidden.format("me@example.com"))
+        XCTAssertNil(AccountDisplay.full.format(nil))
+        XCTAssertNil(AccountDisplay.full.format(""))
+    }
+
+    func testSettingRoundTripsAndDefaultsToFull() throws {
+        XCTAssertEqual(try AppSettings.parse("{}").accountDisplay, .full)
+        XCTAssertEqual(try AppSettings.parse(#"{"accountDisplay": "bogus"}"#).accountDisplay, .full)
+        let settings = AppSettings(accountDisplay: .masked)
+        XCTAssertTrue(settings.toJSON().contains(#""accountDisplay" : "masked""#))
+        XCTAssertEqual(try AppSettings.parse(settings.toJSON()).accountDisplay, .masked)
+    }
+}

@@ -36,7 +36,7 @@ struct UsagePanelView: View {
 
             VStack(spacing: 8) {
                 ForEach(model.visibleProviders) { provider in
-                    ProviderCard(provider: provider, now: model.now)
+                    ProviderCard(provider: provider, now: model.now, accountDisplay: model.accountDisplay)
                 }
             }
         }
@@ -79,13 +79,14 @@ struct UsagePanelView: View {
 private struct ProviderCard: View {
     let provider: ProviderRow
     let now: Date
+    let accountDisplay: AccountDisplay
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
                 Text(provider.name)
                     .font(.system(size: 13, weight: .semibold))
-                Text(provider.subtitle(now: now))
+                Text(provider.subtitle(now: now, accountDisplay: accountDisplay))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)

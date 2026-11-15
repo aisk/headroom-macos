@@ -95,6 +95,20 @@ struct SettingsView: View {
             }
 
             Section {
+                Picker("Account", selection: $model.settings.accountDisplay) {
+                    ForEach(AccountDisplay.allCases, id: \.self) { display in
+                        Text(display.title).tag(display)
+                    }
+                }
+            } header: {
+                Text("Privacy")
+            } footer: {
+                Text("Controls how signed-in email addresses appear in the panel, for example when sharing your screen. "
+                    + "Partially hidden shows \(AccountMasker.mask("name@example.com")).")
+                    .footnoteStyle()
+            }
+
+            Section {
                 Picker("Refresh automatically", selection: $model.settings.refreshIntervalMinutes) {
                     ForEach(model.intervalChoices, id: \.self) { minutes in
                         Text(Formatting.intervalText(minutes)).tag(minutes)
@@ -124,6 +138,16 @@ struct SettingsView: View {
             return "Launch at login is available when Headroom runs from its app bundle."
         case .enabled, .disabled:
             return nil
+        }
+    }
+}
+
+private extension AccountDisplay {
+    var title: String {
+        switch self {
+        case .full: return "Show"
+        case .masked: return "Partially hidden"
+        case .hidden: return "Hidden"
         }
     }
 }
