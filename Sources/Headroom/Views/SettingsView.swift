@@ -168,6 +168,9 @@ private extension Text {
 final class SettingsWindowController: NSWindowController, NSWindowDelegate {
     let model: SettingsModel
 
+    /// True until the first show when nothing was restored from the autosave name.
+    private var centerOnNextShow: Bool
+
     init(model: SettingsModel) {
         self.model = model
         let hosting = NSHostingController(rootView: SettingsView(model: model))
@@ -176,6 +179,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         window.title = "Headroom Settings"
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
+        centerOnNextShow = !window.setFrameUsingName("HeadroomSettings")
         window.setFrameAutosaveName("HeadroomSettings")
         super.init(window: window)
         window.delegate = self
@@ -188,10 +192,14 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
 
     func bringToFront() {
         guard let window else { return }
-        if !window.isVisible {
-            window.center()
-        }
+        // Activate before center() so an inactive menu-bar app is not pinned to
+        // the main screen. Center only when there is no saved origin; otherwise
+        // center() replaces that origin and autosave writes the centered frame.
         NSApp.activate(ignoringOtherApps: true)
+        if !window.isVisible, centerOnNextShow {
+            window.center()
+            centerOnNextShow = false
+        }
         window.makeKeyAndOrderFront(nil)
     }
 
